@@ -31,7 +31,7 @@ Copied package files:
 
 This package is private staging only.
 
-If uploaded to GitHub, the repository must remain private.
+The private GitHub staging repository has been created/uploaded.
 
 GitHub Pages is not enabled/configured.
 
