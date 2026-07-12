@@ -1,16 +1,17 @@
-﻿# Public Release Checklist
+# Public Preview Checklist
 
 Project: Practical AI Evaluation
-Status: not public-release ready
+Status: public preview live
 
-- [ ] A/Honggao public-release authorization received.
-- [ ] README reviewed.
-- [ ] Status/disclaimer language reviewed.
-- [ ] License/use notes reviewed.
-- [ ] Link check passed.
-- [ ] No local filesystem paths in public-facing HTML.
-- [ ] No unreviewed public GitHub links.
-- [ ] Project-specific claim/rights review complete.
-- [ ] GitHub repository visibility explicitly approved.
-- [ ] GitHub Pages mode and canonical URL explicitly approved.
+## Completed
 
+- [x] Project page is visible through GitHub Pages.
+- [x] Hub links point to the live project preview.
+- [x] Prototype and non-advice boundaries are visible in the project page.
+- [x] Repository README reflects public-preview status.
+
+## Ongoing
+
+- [ ] Periodically verify live links.
+- [ ] Continue citation and claim-boundary review.
+- [ ] Keep generated-output language framed as draft review aid, not approval or validation.

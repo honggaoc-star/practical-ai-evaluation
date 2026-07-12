@@ -1,27 +1,19 @@
-﻿# Release Notes
+# Release Notes
 
-## Local staging
+## 2026-07-12 - Public Preview
 
-- Local/private staging only.
-- Not a public release.
-- Original source folder preserved.
-- Gate 1 created project folder and notes/templates only.
+- Practical AI Evaluation is visible as a public GitHub Pages preview.
+- The hub links to the live project preview.
+- README, checklist, source inventory, and boundary notes now reflect the public-preview posture.
 
-## Gate 2 PAE package copy
+## Earlier Preparation History
 
-- Copied PAE package files into local/private staging:
-  - index.html
-  - working-paper.html
-  - styles.css
-  - app.js
-- Verified source/target hashes match.
-- Verified local relative references resolve.
-- No GitHub.com action or publication performed.
+- Copied the PAE public-site package into the local GitHub portfolio workspace.
+- Created supporting notes for claims, citations, source inventory, and release context.
+- Reviewed the project through GTB gates before public preview.
 
-## Gate 11 private GitHub upload
+## Ongoing Maintenance
 
-- Honggao completed private browser upload to the `practical-ai-evaluation` repository.
-- The private repository exists with expected files present.
-- GitHub Pages remained disabled/not configured.
-- No public release occurred.
-
+- Continue citation/link checks.
+- Continue claim-boundary review.
+- Keep educational/prototype disclaimers visible.
