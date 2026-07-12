@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Evidence-Centered AI Evaluation - Practical AI Evaluation</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .paper-page { max-width: 980px; margin: 0 auto; padding: 32px 24px 78px; }
+    .paper-hero { padding: 34px 0 24px 24px; border-left: 5px solid var(--gold); }
+    .paper-hero h1 { max-width: 920px; font: 700 clamp(2rem, 4.5vw, 3.45rem)/1.04 var(--sans); }
+    .paper-hero .subtitle { max-width: 840px; margin-top: 12px; color: var(--mid); font: 1.04rem/1.65 var(--serif); }
+    .paper-content { margin-top: 26px; padding: 26px 30px; border: 1px solid var(--rule); border-radius: 4px; background: var(--card); box-shadow: var(--shadow); }
+    .paper-content h1 { font: 700 1.68rem/1.2 var(--sans); color: var(--ink); margin: 0 0 8px; }
+    .paper-content h2 { margin: 28px 0 10px; padding-top: 18px; border-top: 1px solid var(--rule); font: 700 1.24rem/1.3 var(--sans); color: var(--green); }
+    .paper-content h3 { margin: 22px 0 8px; font: 700 1.02rem/1.35 var(--sans); color: var(--blue); }
+    .paper-content h4 { margin: 18px 0 8px; font: 700 0.95rem/1.35 var(--sans); color: var(--ink); }
+    .paper-content p, .paper-content li, .paper-content blockquote { color: var(--mid); font-size: 1rem; line-height: 1.72; }
+    .paper-content p { margin: 0 0 14px; }
+    .paper-content ul, .paper-content ol { margin: 0 0 16px 24px; }
+    .paper-content blockquote { margin: 16px 0; padding: 12px 16px; border-left: 4px solid var(--blue); background: var(--soft-blue); }
+    .paper-figure { margin: 30px 0 24px; padding: 16px; border: 1px solid var(--rule); border-radius: 4px; background: #fbfbf8; }
+    .paper-figure figcaption { margin-top: 12px; color: var(--muted); font: 0.85rem/1.45 var(--sans); }
+    .assurance-loop { display: grid; grid-template-columns: repeat(4, minmax(145px, 1fr)); gap: 10px; }
+    .loop-step { min-width: 0; padding: 12px; border: 1px solid var(--rule); border-radius: 4px; background: #ffffff; }
+    .loop-step strong { display: block; color: var(--green); font: 700 0.9rem/1.3 var(--sans); }
+    .loop-step span { display: block; margin-top: 5px; color: var(--muted); font: 0.82rem/1.45 var(--sans); }
+    .loop-step + .loop-step::before { content: "then"; display: inline-block; margin-bottom: 8px; color: var(--muted); font: 700 0.68rem/1 var(--sans); text-transform: uppercase; letter-spacing: 0.08em; }
+    .paper-table { width: 100%; min-width: 0; max-width: 760px; margin: 18px auto 34px; border-collapse: collapse; table-layout: fixed; font: 0.94rem/1.45 var(--sans); }
+    .paper-table caption { max-width: 100%; caption-side: top; margin-bottom: 8px; color: var(--ink); font: 700 0.9rem/1.35 var(--sans); text-align: left; overflow-wrap: break-word; }
+    .paper-table th, .paper-table td { padding: 10px 12px; border: 1px solid var(--rule); text-align: left; vertical-align: top; white-space: normal; overflow-wrap: anywhere; word-break: normal; }
+    .paper-table th { position: static; background: var(--soft); color: var(--ink); font-size: inherit; z-index: auto; }
+    .paper-table td { color: var(--mid); background: #ffffff; }
+    .paper-table strong { display: block; margin-bottom: 2px; }
+    .paper-table .concept-title { display: block; margin-bottom: 4px; color: var(--green); font-weight: 800; }
+    .framework-table .concept-col { width: 23%; }
+    .framework-table .expression-col { width: 33%; }
+    .framework-table .value-col { width: 44%; }
+    .framework-table tbody th { color: var(--green); font-weight: 800; background: #ffffff; }
+    .paper-date { color: var(--muted); font: 0.9rem/1.5 var(--sans); }
+    .paper-nav-note { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 22px; font: 0.82rem/1.4 var(--sans); }
+    .paper-nav-note a { color: var(--green); text-decoration: none; border-bottom: 1px solid transparent; }
+    .paper-nav-note a:hover { border-color: var(--green); }
+    @media (max-width: 900px) { .assurance-loop { grid-template-columns: repeat(2, minmax(160px, 1fr)); } }
+    @media (max-width: 720px) { .paper-page { padding: 24px 16px 58px; } .paper-content { padding: 20px; } .assurance-loop { grid-template-columns: 1fr; } .paper-table { width: 100%; margin-bottom: 30px; } }
+  </style>
+</head>
+<body>
+  <header id="top" class="app-header">
+    <a class="brand" href="index.html" aria-label="PAE Workbench home">
+      <span class="mark" aria-hidden="true"><span></span></span>
+      <span class="brand-text">
+        <strong>PAE Workbench</strong>
+        <em>Practical AI Evaluation</em>
+      </span>
+    </a>
+    <div class="header-copy">
+      <p class="eyebrow">Framework Paper</p>
+      <h1>Framework behind the Workbench - Working Paper v1.1</h1>
+    </div>
+    <nav class="header-nav" aria-label="Project navigation">
+      <a href="index.html">Workbench</a>
+      <a href="#abstract">Abstract</a>
+    </nav>
+  </header>
+  <main class="paper-page">
+    <section class="paper-hero">
+      <h1>Evidence-Centered AI Evaluation</h1>
+      <p class="subtitle">A Practical Framework for Model Validation, Vendor AI, and Residual Risk Acceptance</p>
+      <aside class="paper-boundary" aria-label="Source verification notice">
+        <strong>Working-paper boundary.</strong>
+        PAE does not interpret legal or regulatory obligations and should not be cited as authority for compliance, model-risk, procurement, security, or legal decisions.
+      </aside>
+      <p class="paper-nav-note"><a href="index.html">Open PAE Workbench</a></p>
+    </section>
+    <article class="paper-content">
+<p class="paper-date">July 2026</p>
+<h2 id="abstract">Abstract</h2>
+<p>AI model evaluation has several important differences from validation and evaluation for traditional models. In traditional model validation, the focus is often on whether a model is conceptually sound, empirically reliable, appropriately implemented, monitored over time, and fit for its stated use [1]. These remain necessary requirements. However, many modern AI systems are not simply internally developed models with stable inputs, controlled implementation, and transparent governance. They may be vendor-hosted, generative, retrieval-augmented, opaque, continuously updated, connected to internal data, exposed to open-ended user behavior, and embedded in business workflows. This paper proposes an evidence-centered framework for AI evaluation. The framework argues that AI assurance should not ask only whether a model can be explained or whether it performs well on a benchmark. It should ask whether a defined use of an AI system can be justified with sufficient evidence, controls, monitoring, and accountable residual-risk acceptance. The paper develops this position through several concepts: evidence sufficiency, two-layer vendor/user evaluation, use-case-specific risk tiering, human reliance, explainability as one evidence type, data boundaries, use-case-specific testing, adversarial misuse resistance, monitoring, and conditional residual-risk review. The paper then shows how these concepts can be operationalized through PAE Workbench and applies that implementation logic to a vendor LLM internal knowledge-search case.</p>
+<p><strong>Keywords:</strong> artificial intelligence, model validation, model risk management, AI evaluation, vendor AI, generative AI, evidence sufficiency, residual risk, AI governance</p>
+<h2 id="1-introduction">1. Introduction</h2>
+<p>Traditional model validation has a well-established institutional purpose. It asks whether a model is fit for its intended use, whether its assumptions and design are conceptually sound, whether empirical performance is reliable, whether implementation is correct, whether limitations are understood, and whether ongoing monitoring is adequate [1]. In banking and financial-risk settings, this discipline provides a useful language for model purpose, effective challenge, documentation, governance, outcomes analysis, and monitoring.</p>
+<p>AI evaluation should not abandon this discipline. The problem is that many AI systems do not fit neatly within the traditional validation object. A deployed AI system may include a third-party foundation model, an API service, a retrieval corpus, prompts, system instructions, guardrails, user interface, access-control layer, logging process, monitoring workflow, and human review process. The evaluated object is no longer only a model. It is a system placed into a use context.</p>
+<p>The organizing move in this paper is practical: AI evaluation should examine the decision to use an AI-enabled system in a defined context, not only the model considered in isolation. Evidence-centered AI evaluation asks whether the available evidence is sufficient to justify a defined use under stated limits, controls, monitoring obligations, and residual-risk acceptance.</p>
+<p>The evaluated object therefore has to be stated carefully. A model is a component: weights, rules, an algorithm, or another capability-producing mechanism. An AI system may include the model together with prompts, retrieval, tools, interfaces, access controls, logging, and guardrails. A deployment adds vendor terms, data access, user groups, monitoring processes, and change-management obligations. A business use defines the purpose, affected parties, decision influence, and prohibited uses. The accountable decision is not a generic declaration that the technology is acceptable; it is a review posture for a defined use under defined conditions.</p>
+<p>This distinction is the basis for the paper's logic. Model-centered validation remains necessary where the model is the right object of review. But for many modern AI systems, especially vendor-mediated, generative, retrieval-based, interactive, or workflow-embedded systems, the evaluation question is broader: whether the system's use can be supported by evidence that is relevant, current, risk-commensurate, traceable, and sufficient for the decision being made.</p>
+<p>This paper starts from a practical question:</p>
+<blockquote>How should an organization decide whether an AI model or AI-enabled system is fit for a specific use, sufficiently controlled, and sufficiently understood to support responsible deployment?</blockquote>
+<p>The answer proposed here is evidence-centered AI evaluation. The term is intended to emphasize that evaluation should produce decision-useful evidence, not merely a score, benchmark result, explanation, or compliance checklist. A defined use should proceed only when it is supportable under specified conditions, with known limitations, controls, monitoring obligations, and accountable residual-risk acceptance.</p>
+<p>The contribution of the paper is not a new technical metric. It is a practical framework for institutional AI evaluation. The framework contributes five ideas:</p>
+<ol>
+<li><strong>Evidence sufficiency</strong> should be the organizing concept connecting validation, evaluation, monitoring, and accountable review.</li>
+<li><strong>Vendor AI requires two layers of evidence:</strong> vendor-level evidence about the model or platform and user-level evidence about the deployed use.</li>
+<li><strong>Risk tiering should determine required assurance</strong>, not merely label a model as high, medium, or low risk.</li>
+<li><strong>Explainability should be repositioned</strong> as one evidence type within broader assurance, especially for generative AI.</li>
+<li><strong>Residual-risk acceptance should be conditional</strong>, not a declaration that a system is safe.</li>
+</ol>
+<p>The paper also anticipates implementation through PAE Workbench, a practical system designed to convert AI use cases into evidence maps, test plans, monitoring plans, and residual-risk review packages. The case study later in the paper is therefore not a standalone example. It is an application of the same operational logic.</p>
+<h2 id="2-traditional-model-validation-and-its-limits">2. Traditional Model Validation and Its Limits</h2>
+<p>In traditional model validation or evaluation, the focus is commonly on a model's intended use, conceptual soundness, data quality, methodology, implementation, empirical performance, limitations, governance, and ongoing monitoring [1]. This structure is powerful because it creates a disciplined challenge process. A model is not accepted because it is sophisticated; it is accepted because the organization can explain its purpose, review its assumptions, test its performance, understand its limits, monitor its behavior, and govern its use.</p>
+<p>This remains the baseline for AI evaluation. Many AI or machine-learning models, especially narrower predictive systems, should still be evaluated through traditional validation concepts. A document classifier, fraud model, credit model, ranking model, forecasting model, or churn model may require validation of training data, feature construction, performance, calibration, bias, stability, implementation, and monitoring. Explainability may also remain central where model drivers, reason codes, monotonicity, sensitivity, or adverse-action requirements matter [1, 7].</p>
+<p>The limitation appears when the model-centered frame is applied to complex AI systems. For many generative AI or vendor AI deployments, the organization may not control or inspect the model's training data, weights, architecture, alignment process, or update cycle. Yet the organization may control the use case, data exposure, prompts, user roles, workflow, local testing, monitoring, and approval conditions. The evaluation problem moves from "Is this model valid?" to "Is this system, in this use, supportable?"</p>
+<p>This distinction is important. Traditional model validation is still necessary where it applies. But modern AI systems require a broader evaluation package.</p>
+<h2 id="3-why-ai-evaluation-is-different">3. Why AI Evaluation Is Different</h2>
+<p>AI model evaluation has several important differences from evaluation for traditional models. These differences are not always categorical. Some are differences of degree. But together they change the evaluation problem.</p>
+<h3 id="3-1-third-party-ai-is-central-not-peripheral">3.1 Third-party AI is central, not peripheral</h3>
+<p>Traditional model risk frameworks recognize vendor models, but vendor models are often treated as a special case within a broader internal model governance structure [1]. In AI systems, third-party dependency may be central. Foundation models, model APIs, copilots, embedded SaaS AI, vector databases, guardrail tools, and monitoring services can all be part of the deployed system.</p>
+<p>This matters because third-party risk and model risk become intertwined. SR 23-4 frames third-party risk management as a lifecycle problem involving planning, due diligence, contract negotiation, ongoing monitoring, and termination [2]. For AI systems, those third-party controls become part of the evaluation evidence. A vendor's data retention policy, model update process, audit report, security incident notification, and subcontractor controls may affect whether the AI use is supportable.</p>
+<p>The practical implication is that third-party risk should no longer be treated as an "also" item in AI evaluation. For vendor AI, it is part of the evaluation object.</p>
+<h3 id="3-2-vendor-ai-creates-a-two-layer-evidence-problem">3.2 Vendor AI creates a two-layer evidence problem</h3>
+<p>Vendor AI requires two different types of evidence. The vendor can provide evidence about the model or platform in general: architecture, security, privacy, evaluation, safety controls, data handling, retention, and change management. The user organization must provide evidence about the deployed use: business purpose, data boundary, user population, workflow, local testing, human reliance, monitoring, and residual-risk acceptance.</p>
+<p>NIST AI RMF emphasizes that AI risk depends on context and lifecycle roles [3]. This point becomes very practical for vendor AI. A model that is acceptable as a general technology may be unacceptable in a particular business workflow. A vendor benchmark may say little about whether an internal knowledge-search tool cites the right policy, respects access controls, refuses prohibited advice, or avoids disclosing restricted documents.</p>
+<p>The user organization therefore cannot outsource evaluation. It may rely on vendor evidence for some questions, but it must generate local evidence for local use.</p>
+<h3 id="3-3-data-boundaries-become-deployment-boundaries">3.3 Data boundaries become deployment boundaries</h3>
+<p>Traditional validation often focuses on development data: accuracy, completeness, representativeness, lineage, and relevance. AI systems require an expanded data view. The relevant boundary includes prompts, uploaded files, retrieved documents, embeddings, logs, telemetry, outputs, vendor-retained records, and feedback data.</p>
+<p>NIST GenAI Profile and OWASP both highlight data-related risks in generative AI systems, including sensitive-information disclosure, data provenance, content integrity, and security risks [4, 10]. Supply-chain guidance also matters because AI systems may depend on third-party data, software, vendors, and infrastructure [11].</p>
+<p>The practical question becomes:</p>
+<blockquote>What data can the deployed system touch, where can that data go, and what evidence proves the boundary holds?</blockquote>
+<p>This question is more operational than a traditional data-quality review. It asks whether users can paste sensitive information, whether retrieval respects access rights, whether prompts and outputs are retained, whether embeddings are stored, whether vendor terms permit training use, and whether outputs can disclose restricted information.</p>
+<h3 id="3-4-explainability-is-important-but-not-assurance">3.4 Explainability is important but not assurance</h3>
+<p>Explainability remains a regulatory and practical expectation in important contexts. For credit decisions, for example, creditors must provide specific and accurate adverse-action reasons even when complex algorithms are used [7]. NIST AI RMF treats explainability and interpretability as characteristics of trustworthy AI [3]. In EU contexts, the EU AI Act and GDPR also reinforce transparency and human oversight expectations for certain high-risk or automated decisions [8, 9].</p>
+<p>But the practical adequacy of AI evaluation should not be bounded by explainability. Interpretability literature has long noted that "interpretability" is used in multiple ways and is often underspecified [12, 13]. Rudin argues that, in high-stakes settings, inherently interpretable models should often be preferred over post-hoc explanations of black-box models [14]. These arguments are especially relevant for narrower ML systems where model drivers and reason codes are decision-useful.</p>
+<p>For generative AI, the issue changes. A model-generated explanation may be fluent and plausible, but it may not faithfully describe the internal process that produced the output. In that setting:</p>
+<blockquote>Explanation is often an output to be evaluated, not evidence to be trusted.</blockquote>
+<p>Therefore, for complex AI systems, explainability should be treated as one evidence type. It should be supplemented by traceability, grounding, behavioral testing, data-boundary controls, monitoring, and residual-risk governance.</p>
+<h3 id="3-5-adversarial-testing-becomes-boundary-defense">3.5 Adversarial testing becomes boundary defense</h3>
+<p>Traditional model stress testing often examines rare or severe scenarios to assess robustness. For generative AI, RAG, and agentic systems, adversarial testing has a different character. It tests whether the system remains within approved boundaries when users, retrieved documents, tools, or attackers attempt to push it outside those boundaries.</p>
+<p>OWASP's LLM application risks include prompt injection, sensitive-information disclosure, insecure output handling, excessive agency, and overreliance [10]. Technical work on LLM security probing and prompt injection further shows that attacks may be direct or indirect, including malicious instructions embedded in retrieved content [16, 17, 18].</p>
+<p>This means adversarial testing is not merely a security exercise outside model validation. It is core evidence for AI evaluation. The question is not only whether the system works when used as intended. It is whether the system stays within approved boundaries when use becomes careless, creative, adversarial, or hostile.</p>
+<h2 id="4-evidence-centered-ai-evaluation">4. Evidence-Centered AI Evaluation</h2>
+<p>The framework proposed in this paper is evidence-centered because the goal of evaluation is to support a decision. A model card, vendor report, benchmark result, validation memo, or test result is not valuable simply because it exists. It is valuable if it helps determine whether a defined use is supportable.</p>
+<p>The framework uses eleven evidence questions:</p>
+<ol>
+<li><strong>Purpose:</strong> What decision, workflow, or product function is the AI system meant to support?</li>
+<li><strong>System boundary:</strong> What is being evaluated: model, vendor platform, RAG system, agent, workflow, or full deployed system?</li>
+<li><strong>Risk tier:</strong> What level of assurance is required given decision consequence, data sensitivity, autonomy, vendor dependency, opacity, security exposure, scale, reversibility, and monitoring feasibility?</li>
+<li><strong>Evidence sufficiency:</strong> Is the evidence relevant, current, risk-commensurate, independent where needed, and traceable to the decision?</li>
+<li><strong>Vendor/user evidence split:</strong> What is the organization relying on the vendor to prove, and what has the organization proven locally?</li>
+<li><strong>Human reliance:</strong> What does the human actually do, under what conditions, with what authority, and with what evidence that oversight works?</li>
+<li><strong>Data boundary:</strong> What data can the system access, retrieve, transmit, retain, learn from, or disclose?</li>
+<li><strong>Testing:</strong> Has the system been tested for expected use, edge cases, prohibited use, grounding, robustness, human reliance, data boundaries, and operational constraints?</li>
+<li><strong>Adversarial and misuse resistance:</strong> Can the system resist reasonably foreseeable prompt injection, retrieval contamination, data extraction, policy bypass, insecure output handling, and tool misuse?</li>
+<li><strong>Monitoring and change management:</strong> How will the organization detect degradation, misuse, scope creep, vendor changes, data-boundary violations, and emerging risks after deployment?</li>
+<li><strong>Residual risk and accountability:</strong> What risk remains after controls, and who accepts it for the defined use?</li>
+</ol>
+<p>This list is not intended to be a universal checklist. It is a decision structure. Different use cases will require different depth, evidence, and independence.</p>
+<h2 id="5-evidence-sufficiency">5. Evidence Sufficiency</h2>
+<p>Evidence sufficiency is the degree to which the available evidence supports a defensible conclusion that an AI system is fit for a defined use, within stated limitations, controls, and residual-risk acceptance.</p>
+<p>The concept is partly inspired by the credibility framing in FDA's draft guidance on AI for regulatory decision-making, where the adequacy of evidence depends on context of use, model influence, and decision consequence [6]. The analogy here is limited to evidence framing, not FDA authority outside its context. Evidence is not sufficient in general. It is sufficient, or insufficient, for a use.</p>
+<p>Evidence sufficiency should be judged along several dimensions:</p>
+<ul>
+<li><strong>Relevance:</strong> Does the evidence address the actual deployed system and use case?</li>
+<li><strong>Coverage:</strong> Does it address the material risks?</li>
+<li><strong>Rigor:</strong> Is the evidence strong enough for the risk tier?</li>
+<li><strong>Currency:</strong> Does it match the current system version, corpus, vendor terms, and deployment context?</li>
+<li><strong>Independence:</strong> Has it been subject to appropriate challenge?</li>
+<li><strong>Traceability:</strong> Can the conclusion be traced back to evidence?</li>
+<li><strong>Limitations:</strong> Are uncertainty and residual risk explicit?</li>
+</ul>
+<p>This concept is important because AI evaluations will often contain partial evidence. Vendor documentation may be useful but generic. Internal testing may be relevant but limited. Monitoring may reduce uncertainty but not eliminate it. The evaluation question is not "Do we have documents?" The question is "Does the evidence support this decision?"</p>
+<h2 id="6-risk-tiering-as-required-assurance">6. Risk Tiering as Required Assurance</h2>
+<p>Risk tiering should not be a label attached to a model. It should be a decision about required assurance.</p>
+<p>This framing is intended to be compatible with risk-based governance ideas reflected in model-risk, AI-risk, third-party, and high-risk-system frameworks [1, 3, 4, 8]. For practical institutional use, the tier must be tied to evidence requirements.</p>
+<p>The proposed tiers are:</p>
+<ul>
+<li><strong>Tier 0: Prohibited or not currently supportable.</strong></li>
+<li><strong>Tier 1: Low risk.</strong></li>
+<li><strong>Tier 2: Moderate risk.</strong></li>
+<li><strong>Tier 3: High risk.</strong></li>
+<li><strong>Tier 4: Critical or enterprise-sensitive risk.</strong></li>
+</ul>
+<p>PAE Workbench v1.1 currently implements Tier 0 through Tier 3 in the public prototype. Tier 4 is retained here as a conceptual escalation category for future design work and would require additional governance, ownership, and source review before implementation.</p>
+<p>Escalation triggers should include sensitive individual-level data, customer-facing outputs in regulated domains, employment or credit impact, public-facing deployment, agentic tool use, lack of meaningful human review, inability to monitor, unresolved adversarial failures, and expansion beyond the approved use.</p>
+<p>The principle is simple:</p>
+<blockquote>Higher risk does not merely require more documents. It requires more relevant, rigorous, independent, current, and decision-linked evidence.</blockquote>
+<h2 id="7-human-reliance-and-decision-influence">7. Human Reliance and Decision Influence</h2>
+<p>"Human in the loop" is often treated as a mitigating control. In AI evaluation, it should be treated as a claim requiring evidence.</p>
+<p>Human oversight reduces risk only when the review is meaningful, feasible, informed, accountable, and monitored. NIST emphasizes human-AI configuration and affected parties [3, 4], while some legal and regulatory frameworks, including the EU AI Act in applicable contexts, emphasize human oversight in high-risk systems [8]. But the practical concern is that human review can become nominal. Users may defer to AI output, copy fluent text, accept fabricated citations, or rely on a ranking that shapes attention.</p>
+<p>The evaluation should therefore ask:</p>
+<ul>
+<li>What role does the AI output play?</li>
+<li>Does it draft, summarize, rank, filter, recommend, or decide?</li>
+<li>Can the human reviewer see source material?</li>
+<li>Can the reviewer override the AI?</li>
+<li>Are overrides tracked?</li>
+<li>Is the reviewer trained and given enough time?</li>
+<li>Does monitoring detect rubber-stamp behavior?</li>
+</ul>
+<p>The relevant question is not "Is there a human in the loop?" It is "What does the human actually do, under what conditions, with what authority, and with what evidence that oversight works?"</p>
+<h2 id="8-testing-monitoring-and-review">8. Testing, Monitoring, and Review</h2>
+<p>AI testing should be designed from the use case backward. Generic benchmarks can be informative, but they are not sufficient for a deployment decision. HELM is useful because it shows the importance of multi-metric evaluation rather than narrow accuracy-only evaluation [15]. But an institutional evaluator still must ask whether the system works for the local use case.</p>
+<p>Testing should cover representative tasks, edge cases, grounding, source traceability, prohibited use, adversarial misuse, data-boundary behavior, human reliance, robustness, fairness where applicable, and operational performance.</p>
+<p>Monitoring then extends evaluation after the initial accountable decision. SR 11-7 treats ongoing monitoring as a core component of model risk management [1]. SR 23-4 does the same for third-party relationships [2]. For AI systems, monitoring should include not only performance drift, but also use-case drift, prompt injection attempts, missing citations, unsupported outputs, data-boundary exceptions, user reliance, vendor changes, and incident reports.</p>
+<p>Residual-risk acceptance should therefore be conditional. It should not mean "this system is safe." It should mean:</p>
+<blockquote>This defined use is supportable under these conditions, with these controls, these monitoring obligations, and this accepted residual risk.</blockquote>
+<h2 id="9-pae-workbench-as-practical-implementation">9. PAE Workbench as Practical Implementation</h2>
+<p>The framework should not remain only conceptual. PAE Workbench is intended as a practical implementation of evidence-centered AI evaluation. Its design premise is that an AI evaluation framework becomes more credible when it can be translated into intake fields, risk-driver logic, evidence requirements, test obligations, monitoring expectations, and reviewable residual-risk language.</p>
+<p>The Workbench is designed to capture use-case intake, classify risk drivers, separate vendor and user evidence, identify evidence gaps, generate test plans, generate monitoring plans, and draft residual-risk postures for accountable review. It does not assume that the user has live model connectivity or full access to model internals. This is intentional. Many real evaluations begin with partial vendor documentation, internal validation evidence, test results, policy constraints, and a practical need to decide whether a use can proceed.</p>
+<p>The Workbench's purpose is not to replace expert judgment. Its purpose is to make judgment structured, traceable, repeatable, and reviewable. The tool should therefore operate as a guided evaluation workspace rather than a black-box scoring engine. Its output should be an evidence package that a reviewer can inspect, challenge, supplement, and accept, defer, or reject through the organization's own process.</p>
+<p>The Workbench implementation follows the framework's main evidence questions:</p>
+<ul>
+<li>use-case definition becomes structured intake;</li>
+<li>system boundary becomes a system profile;</li>
+<li>risk tiering becomes transparent risk-driver logic;</li>
+<li>evidence sufficiency becomes an evidence status and gap review;</li>
+<li>vendor/user evidence split becomes source mapping;</li>
+<li>human reliance becomes decision-influence and oversight review;</li>
+<li>data boundaries become data-access, retention, upload, and disclosure controls;</li>
+<li>testing becomes a use-case-specific test plan;</li>
+<li>adversarial resistance becomes boundary-defense testing;</li>
+<li>monitoring becomes metrics, incident triggers, and change-review obligations;</li>
+<li>residual-risk acceptance becomes a review posture with conditions.</li>
+</ul>
+<table class="paper-table framework-table" aria-label="Framework to Workbench mapping">
+  <caption>Table 1. Framework concepts and Workbench expression.</caption>
+  <colgroup>
+    <col class="concept-col">
+    <col class="expression-col">
+    <col class="value-col">
+  </colgroup>
+  <thead>
+    <tr>
+      <th scope="col">Framework concept</th>
+      <th scope="col">Workbench expression</th>
+      <th scope="col">Review value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th scope="row">Defined use</th>
+      <td>Use-case intake and system profile.</td>
+      <td>Prevents evaluation from collapsing into a generic model review.</td>
+    </tr>
+    <tr>
+      <th scope="row">Risk tiering</th>
+      <td>Risk drivers and tier rationale.</td>
+      <td>Ties depth of assurance to consequence, data sensitivity, autonomy, opacity, and monitoring feasibility.</td>
+    </tr>
+    <tr>
+      <th scope="row">Vendor/user evidence split</th>
+      <td>Evidence source mapping.</td>
+      <td>Separates vendor claims from evidence the deploying organization must generate locally.</td>
+    </tr>
+    <tr>
+      <th scope="row">Evidence sufficiency</th>
+      <td>Evidence status, gaps, and conditions.</td>
+      <td>Shows what is accepted, partial, stale, missing, or unresolved before accountable review.</td>
+    </tr>
+    <tr>
+      <th scope="row">Testing and monitoring</th>
+      <td>Test plan, metrics, incident triggers, and change review.</td>
+      <td>Turns evaluation into an ongoing control system rather than a one-time document.</td>
+    </tr>
+    <tr>
+      <th scope="row">Residual-risk acceptance</th>
+      <td>Decision brief and residual-risk package.</td>
+      <td>Frames the output as a draft review artifact, not automatic approval or proof of safety.</td>
+    </tr>
+  </tbody>
+</table>
+<figure class="paper-figure">
+  <div class="assurance-loop" aria-label="Evidence-centered assurance loop">
+    <div class="loop-step"><strong>Risk tier</strong><span>Identify required assurance for the defined use.</span></div>
+    <div class="loop-step"><strong>Evidence required</strong><span>Map vendor and local evidence to material risks.</span></div>
+    <div class="loop-step"><strong>Tests and monitoring</strong><span>Check behavior, boundaries, reliance, and change over time.</span></div>
+    <div class="loop-step"><strong>Review posture</strong><span>Document conditions, unresolved gaps, and residual risk.</span></div>
+  </div>
+  <figcaption>Figure 1. Risk tiering should change the evidence, testing, monitoring, and review posture required for a use. The loop is not a release-clearance path; it is a structure for accountable evaluation.</figcaption>
+</figure>
+<p>In practical use, the Workbench is designed to produce:</p>
+<ul>
+<li>use-case profile;</li>
+<li>system boundary statement;</li>
+<li>risk-tier rationale;</li>
+<li>vendor/user evidence map;</li>
+<li>evidence gap analysis;</li>
+<li>test plan;</li>
+<li>monitoring plan;</li>
+<li>residual-risk review posture;</li>
+<li>residual-risk statement;</li>
+<li>change-trigger list;</li>
+<li>decision brief for accountable reviewers.</li>
+</ul>
+<p>This implementation layer matters for two reasons. First, it tests whether the framework is operational rather than merely descriptive. If a concept cannot be translated into intake fields, evidence requirements, tests, monitoring metrics, or review conditions, then the concept may be too vague for practical use. Second, it makes the evaluation process portable. A structured Workbench case can be exported, reviewed, reused, challenged, and compared across use cases without pretending that all AI systems share the same risk profile.</p>
+<p>The Workbench also reinforces the two-layer problem for vendor AI. Vendor documents may be cataloged as evidence, but they are not treated as complete proof of local fitness for use. The Workbench must still ask what the organization has tested locally, what gaps remain, and what conditions must attach to any accountable decision. This is especially important for generative AI and retrieval-augmented systems, where the deployed behavior depends on corpus design, prompts, user roles, access controls, monitoring, escalation rules, and vendor change management.</p>
+<h2 id="10-case-application-vendor-llm-for-internal-knowledge-search">10. Case Application: Vendor LLM for Internal Knowledge Search</h2>
+<p>The vendor LLM internal knowledge-search case illustrates how the framework and Workbench implementation operate together. The case is not simply an example appended to the framework. It is an application of the Workbench logic to a common AI deployment pattern: a vendor-hosted LLM or assistant used by employees to search, summarize, and retrieve approved internal documents.</p>
+<p>Consider a vendor LLM deployed over approved policies, procedures, FAQs, training materials, and reference documents. Employees ask questions and receive cited answers. The system is not authorized to make final legal, HR, compliance, credit, regulatory, customer, or employment decisions.</p>
+<p>In Workbench terms, the use-case intake would define the business purpose, intended users, approved repositories, prohibited uses, deployment stage, and accountable owners. The system profile would describe the vendor platform, retrieval pipeline, approved corpus, access-control model, prompts or system instructions, logging process, monitoring workflow, and human escalation path. This prevents the evaluation from collapsing into a generic review of the vendor's base model.</p>
+<p>The preliminary risk tier is moderate if the use remains internal, uses an approved and versioned corpus, excludes customer-specific and employee-specific data, disables user uploads, requires citations, communicates prohibited uses, inherits and tests access controls, completes prompt-injection and retrieval-contamination testing, monitors failures, and requires reapproval before expansion. The tier should escalate if the use becomes customer-facing, influences legal or regulatory decisions, handles sensitive individual-level data, allows user uploads, lacks citations, weakens monitoring, or relies on nominal human review.</p>
+<p>The evidence map should distinguish vendor evidence from user-side evidence. Vendor evidence should include security documentation, data-retention and training-use terms, subprocessors, logging practices, incident notification terms, safety or red-team summaries, and model-update visibility. User-side evidence should include approved corpus inventory, data classification review, access-control tests, citation-quality tests, hallucination and unsupported-answer tests, prompt-injection tests, user guidance, escalation procedures, monitoring plan, change triggers, and approval memo.</p>
+<p>The Workbench would translate this evidence map into active gaps. Typical gaps before accountable pilot review include incomplete vendor retention terms, missing access-control inheritance tests, unproven citation quality, incomplete prompt-injection testing, undefined monitoring thresholds, and unclear vendor change triggers. These gaps should not automatically block all use, but they should determine whether the posture is supportable, conditional, limited to pilot, deferred, or rejected.</p>
+<p>The test plan should be use-case specific. A minimum pilot test set might include representative employee questions, ambiguous questions, outdated-policy questions, prohibited-use requests, citation challenges, role-based access tests, and direct or indirect prompt-injection attempts. The acceptance signal should not be generic model accuracy. It should include source-specific citations, unsupported-answer rate, refusal behavior for prohibited topics, access-control compliance, escalation behavior, and severity-classified failure logging.</p>
+<p>The monitoring plan should cover behavior, not only availability. Useful metrics include usage volume, top question categories, no-answer rates, missing-citation rates, user feedback, reported hallucinations, escalation frequency, policy-bypass attempts, prompt-injection attempts, vendor model or retrieval changes, and corpus updates. Change triggers should require review when the vendor model changes, the corpus expands, access-control design changes, prohibited uses are requested frequently, or monitoring indicates material failures.</p>
+<p>The illustrative posture is:</p>
+<blockquote>Conditionally supportable for accountable pilot review, if restrictions and evidence gates are met.</blockquote>
+<p>The residual risks include hallucinated or unsupported answers, employee overreliance, vendor model changes, prompt injection, outdated or conflicting source documents, and monitoring gaps. The posture is supportable only if the pilot remains bounded, non-decisioning, monitored, and conditional. Expansion to sensitive data, customer-facing use, final decision support, or regulated interpretation should require renewed review with stronger evidence.</p>
+<h2 id="11-discussion">11. Discussion</h2>
+<p>The framework proposed here is intentionally practical. It does not attempt to solve all theoretical questions in AI evaluation. It aims to organize institutional judgment.</p>
+<p>The main position is that AI evaluation should move from model-centered validation toward evidence-centered assurance. This does not weaken validation. It preserves validation where it applies and expands the evaluation scope where the evaluated object is a vendor-mediated, generative, retrieval-based, interactive, or workflow-embedded AI system.</p>
+<p>The framework also avoids two extremes. It does not treat vendor AI as unknowable and therefore unusable. But it also does not accept vendor documentation as sufficient. It asks what the vendor can prove, what the user must prove locally, and what uncertainty remains.</p>
+<p>The framework also reframes explainability. Explainability remains important, sometimes required, and often useful. But explainability is not assurance. A system can be partly explainable and still unsafe, biased, unstable, poorly monitored, or inappropriate for a use. Conversely, some AI systems may be supportable despite limited mechanistic interpretability if they are tightly scoped, tested, monitored, and controlled.</p>
+<p>The Workbench and case application are included for the same reason. A practical framework should expose its own implementation burden. The Workbench shows how the concepts become evaluation records and artifacts. The case application shows how those artifacts support a bounded residual-risk posture rather than an abstract claim that a technology is acceptable.</p>
+<h2 id="12-conclusion">12. Conclusion</h2>
+<p>AI systems should not proceed because they are impressive, explainable, or benchmark-competitive. A defined use should proceed only when it is supportable with sufficient evidence, controls, monitoring, and accountable acceptance of residual risk.</p>
+<p>Traditional validation remains necessary, especially for narrower statistical and machine-learning models. But modern AI systems require a broader evaluation package. That package should include use-case definition, risk tiering, vendor/user evidence split, evidence sufficiency, human reliance, data boundaries, testing, adversarial misuse resistance, monitoring, change management, and residual-risk acceptance.</p>
+<p>PAE Workbench is one way to operationalize that package. The vendor LLM internal knowledge-search case shows the intended posture: start from the general framework, translate it into a structured evaluation workflow, and then apply the workflow to a concrete use case with explicit conditions and residual risk.</p>
+<p>The working paper's central claim is therefore:</p>
+<blockquote>AI assurance should not ask only whether the model can be explained or whether it performs on a benchmark. It should ask whether the system's use can be justified.</blockquote>
+<h2 id="references">References</h2>
+<p>[1] Board of Governors of the Federal Reserve System and Office of the Comptroller of the Currency. <em>Supervisory Guidance on Model Risk Management</em>, Attachment to SR 11-7. April 4, 2011.</p>
+<p>[2] Board of Governors of the Federal Reserve System, Federal Deposit Insurance Corporation, and Office of the Comptroller of the Currency. <em>Interagency Guidance on Third-Party Relationships: Risk Management</em>, Attachment to SR 23-4. June 7, 2023.</p>
+<p>[3] National Institute of Standards and Technology. <em>Artificial Intelligence Risk Management Framework (AI RMF 1.0).</em> NIST AI 100-1. January 26, 2023.</p>
+<p>[4] National Institute of Standards and Technology. <em>Artificial Intelligence Risk Management Framework: Generative Artificial Intelligence Profile.</em> NIST AI 600-1. July 26, 2024.</p>
+<p>[5] International Organization for Standardization. <em>ISO/IEC 42001:2023 Information technology - Artificial intelligence - Management system.</em> December 2023.</p>
+<p>[6] U.S. Food and Drug Administration. <em>Considerations for the Use of Artificial Intelligence to Support Regulatory Decision-Making for Drug and Biological Products.</em> Draft Guidance. January 2025.</p>
+<p>[7] Consumer Financial Protection Bureau. <em>Consumer Financial Protection Circular 2022-03: Adverse action notification requirements in connection with credit decisions based on complex algorithms.</em> May 26, 2022.</p>
+<p>[8] European Parliament and Council. <em>Regulation (EU) 2024/1689 laying down harmonised rules on artificial intelligence.</em> Official Journal of the European Union. July 12, 2024.</p>
+<p>[9] European Parliament and Council. <em>Regulation (EU) 2016/679 General Data Protection Regulation.</em> April 27, 2016; Official Journal of the European Union, OJ L 119, May 4, 2016.</p>
+<p>[10] OWASP Foundation. <em>2025 Top 10 Risk &amp; Mitigations for LLMs and Gen AI Apps.</em> 2025.</p>
+<p>[11] National Institute of Standards and Technology. <em>Cybersecurity Supply Chain Risk Management Practices for Systems and Organizations.</em> NIST SP 800-161r1-upd1. May 2022; updated November 1, 2024.</p>
+<p>[12] Zachary C. Lipton. <em>The Mythos of Model Interpretability.</em> arXiv:1606.03490. 2016.</p>
+<p>[13] Finale Doshi-Velez and Been Kim. <em>Towards A Rigorous Science of Interpretable Machine Learning.</em> arXiv:1702.08608. 2017.</p>
+<p>[14] Cynthia Rudin. <em>Stop Explaining Black Box Machine Learning Models for High Stakes Decisions and Use Interpretable Models Instead.</em> arXiv:1811.10154. 2018; Nature Machine Intelligence 1, 206-215, 2019.</p>
+<p>[15] Percy Liang et al. <em>Holistic Evaluation of Language Models.</em> arXiv:2211.09110. 2022; revised 2023.</p>
+<p>[16] Leon Derczynski et al. <em>garak: A Framework for Security Probing Large Language Models.</em> arXiv:2406.11036. 2024.</p>
+<p>[17] Sippo Rossi et al. <em>An Early Categorization of Prompt Injection Attacks on Large Language Models.</em> arXiv:2402.00898. 2024.</p>
+<p>[18] Kai Greshake et al. <em>Not What You've Signed Up For: Compromising Real-World LLM-Integrated Applications with Indirect Prompt Injection.</em> arXiv:2302.12173. 2023.</p>
+    </article>
+  </main>
+  <footer class="site-footer">
+    <span>Practical AI Evaluation &middot; Working Paper v1.1 &middot; July 2026</span>
+    <span>Copyright 2026 Honggao Cao. Personal, classroom, and noncommercial educational use unless otherwise noted.</span>
+    <span><a href="index.html">Workbench</a> &middot; <a href="#top">Back to top</a></span>
+  </footer>
+</body>
+</html>

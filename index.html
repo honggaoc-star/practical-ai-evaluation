@@ -1,0 +1,521 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>PAE Workbench</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header id="top" class="app-header">
+    <a class="brand setup-link" href="#caseSetup" aria-label="PAE Workbench home">
+      <span class="mark" aria-hidden="true"><span></span></span>
+      <span class="brand-text">
+        <strong>PAE Workbench</strong>
+        <em>Practical AI Evaluation</em>
+      </span>
+    </a>
+    <nav class="header-nav" aria-label="Project navigation">
+      <a class="setup-link" href="#caseSetup">Setup</a>
+      <a href="#howToUse">How to Use</a>
+      <a href="working-paper.html">Framework Paper</a>
+    </nav>
+  </header>
+  <input id="caseFileInput" class="visually-hidden" type="file" accept="application/json,.json">
+
+  <main id="caseSetup" class="start-screen">
+    <section class="start-hero" aria-labelledby="start-title">
+      <p class="eyebrow">PAE Workbench</p>
+      <h1 id="start-title">Building draft review evidence for AI-enabled decisions.</h1>
+      <p class="lead">
+        PAE Workbench helps evaluators define a use case, classify risk, map vendor and user evidence, generate tests and monitoring plans, and draft a residual-risk posture for accountable human review.
+      </p>
+      <p class="identity-statement">
+        PAE is a practical framework and workbench for deciding what evidence is needed before relying on an AI-enabled use.
+      </p>
+      <div class="outcome-strip" aria-label="What the Workbench produces">
+        <article>
+          <span>Evidence Map</span>
+          <strong>Vendor and user-side evidence, separated by source.</strong>
+        </article>
+        <article>
+          <span>Gap List</span>
+          <strong>Open issues that must be resolved, conditioned, or accepted.</strong>
+        </article>
+        <article>
+          <span>Tests and Monitoring</span>
+          <strong>Required checks, acceptance signals, metrics, and triggers.</strong>
+        </article>
+        <article>
+          <span>Decision Brief</span>
+          <strong>A draft residual-risk package for accountable review.</strong>
+        </article>
+      </div>
+      <aside class="boundary-note" aria-label="Public boundary notice">
+        <strong>Prototype boundary.</strong>
+        PAE Workbench is an educational evaluation aid based on a working framework. It does not provide legal, regulatory, compliance, security, model-risk, procurement, or professional advice. Outputs are draft review artifacts, not approval, certification, validation, or proof of safety.
+      </aside>
+      <aside class="tour-cue" aria-label="Suggested first tour">
+        <strong>Suggested first tour:</strong> open the flagship demo, review Scope, Evidence, Tests, and Monitoring, then open Artifacts to see the draft brief and readiness review.
+      </aside>
+      <div class="start-actions">
+        <button id="startFlagshipDemo" type="button" class="primary">Open Flagship Demo</button>
+        <button id="startBlankCase" type="button">Create Blank Evaluation</button>
+        <button id="startLoadedCase" type="button">Load Saved Case</button>
+      </div>
+    </section>
+
+    <section id="howToUse" class="howto-section" aria-labelledby="howto-title">
+      <div class="section-heading">
+        <h2 id="howto-title">How to Use This Tool</h2>
+        <span class="badge muted">Suggested workflow</span>
+      </div>
+      <ol class="instruction-list">
+        <li><strong>Start or load a case.</strong> Use the flagship Vendor LLM demo to see the framework end to end, use `Blank New Case` for a baseline evaluation, or use the Library when the case should start from a custom pattern.</li>
+        <li><strong>Define scope before judging risk.</strong> Record the business purpose, owner, users, system boundary, intended uses, and prohibited uses.</li>
+        <li><strong>Answer risk drivers.</strong> Use the risk-driver responses to set the review tier and surface missing information.</li>
+        <li><strong>Build the evidence record.</strong> Separate vendor evidence from user-side evidence, mark gaps, and avoid treating vendor material as proof of local fitness.</li>
+        <li><strong>Plan tests and monitoring.</strong> Convert evidence gaps and risk drivers into required tests, monitoring metrics, incident triggers, and reapproval conditions.</li>
+        <li><strong>Document the decision posture.</strong> Use the decision and artifacts tabs to produce a reviewable package, not an automatic pass/fail answer.</li>
+      </ol>
+    </section>
+
+    <section class="setup-grid" aria-label="Case setup">
+      <section class="setup-panel">
+        <div class="section-heading">
+          <h2>Case Setup</h2>
+          <span class="badge muted">First step</span>
+        </div>
+        <div class="form-grid compact">
+          <label class="wide">
+            Case name
+            <input id="startCaseName" type="text" placeholder="Name this AI evaluation">
+          </label>
+          <label>
+            Evaluation owner
+            <input id="startOwner" type="text" placeholder="Owner or reviewer">
+          </label>
+          <label>
+            Business unit
+            <input id="startBusinessUnit" type="text" placeholder="Responsible group">
+          </label>
+          <label class="wide">
+            Starting point
+            <select id="startTemplateSelector"></select>
+          </label>
+        </div>
+        <button id="startSelectedCase" type="button" class="primary wide-action">Open Workspace</button>
+      </section>
+
+      <section class="setup-panel">
+        <div class="section-heading">
+          <h2>Core Workflow</h2>
+          <span class="badge muted">Evidence centered</span>
+        </div>
+        <div class="workflow-strip">
+          <span>Scope</span>
+          <span>Risk</span>
+          <span>Evidence</span>
+          <span>Tests</span>
+          <span>Monitoring</span>
+          <span>Decision</span>
+        </div>
+        <p class="support-copy">
+          The workspace opens after a case exists. The flagship demo shows the intended evidence-centered arc; blank cases and Library patterns are accelerators, not assumptions about the product's default use.
+        </p>
+      </section>
+    </section>
+
+    <section class="starter-section" aria-labelledby="starter-title">
+      <div class="section-heading">
+        <h2 id="starter-title">Starter Paths</h2>
+        <span class="badge muted">Choose a pattern</span>
+      </div>
+      <div class="starter-grid primary-starters">
+        <article class="starter-card blank" data-template-start="other_blank_evaluation">
+          <p class="panel-label">Blank</p>
+          <h3>Custom AI Evaluation</h3>
+          <p>Start from an empty evaluation record when the use case does not fit a predefined scenario.</p>
+          <button type="button" data-start-template="other_blank_evaluation">Start Blank</button>
+        </article>
+        <article class="starter-card vendor" data-template-start="vendor_llm_internal_knowledge_search">
+          <p class="panel-label">Flagship Demo</p>
+          <h3>Vendor LLM Knowledge Search</h3>
+          <p>Open the main v1.1 demo path for vendor evidence, RAG, data boundaries, access controls, citations, tests, monitoring, and residual-risk posture.</p>
+          <button type="button" data-start-template="vendor_llm_internal_knowledge_search">Open Demo</button>
+        </article>
+      </div>
+      <details class="advanced-starters">
+        <summary>Advanced examples under source and boundary review</summary>
+        <p>These scaffolds are retained for team exploration. They are not public-ready compliance, credit, privacy, or regulated-domain guidance.</p>
+        <div class="starter-grid secondary-starters">
+        <article class="starter-card impact locked-scaffold">
+          <p class="panel-label">Advanced Scaffold</p>
+          <h3>Customer-Facing Drafting</h3>
+          <p>Explore a higher-impact scaffold where human review, privacy, escalation, and customer-harm signals matter. Not public-ready guidance.</p>
+          <button type="button" disabled>Under Review</button>
+        </article>
+        <article class="starter-card credit locked-scaffold">
+          <p class="panel-label">Advanced Scaffold</p>
+          <h3>Internal Decisioning Tool</h3>
+          <p>Explore a high-risk scaffold for credit decision support. Source and professional-boundary review required; not compliance guidance.</p>
+          <button type="button" disabled>Under Review</button>
+        </article>
+        </div>
+      </details>
+    </section>
+  </main>
+
+  <main id="workspaceView" class="workspace is-hidden">
+    <aside class="sidebar" aria-label="Evaluation summary">
+      <section class="summary-panel">
+        <p class="panel-label">Case</p>
+        <h2 id="summaryCaseName">Untitled evaluation</h2>
+        <div class="summary-grid">
+          <div>
+            <span>Status</span>
+            <strong id="summaryStatus">Draft</strong>
+          </div>
+          <div>
+            <span>Tier</span>
+            <strong id="summaryTier">Moderate</strong>
+          </div>
+          <div>
+            <span>Decision Posture</span>
+            <strong id="summaryRecommendation">TBD</strong>
+          </div>
+        </div>
+      </section>
+
+      <section class="summary-panel">
+        <p class="panel-label">Risk Flags</p>
+        <ul id="riskFlags" class="compact-list"></ul>
+      </section>
+
+      <section class="summary-panel">
+        <p class="panel-label">Evidence Status</p>
+        <div id="evidenceBars" class="status-bars"></div>
+      </section>
+
+      <section class="summary-panel">
+        <p class="panel-label">Readiness Gate</p>
+        <div id="readinessScore" class="readiness-score">0/0</div>
+        <ul id="readinessList" class="compact-list readiness-list"></ul>
+        <p class="gate-note">
+          Template starter paths are draft scaffolds. The gate highlights documentation completeness and unresolved review work; it does not verify evidence quality or approve use.
+        </p>
+      </section>
+    </aside>
+
+    <section class="main-panel">
+      <nav class="tabs" aria-label="Evaluation phases">
+        <button class="tab active" type="button" data-tab="howto">How to Use</button>
+        <button class="tab" type="button" data-tab="intake">Scope</button>
+        <button class="tab" type="button" data-tab="library">Library</button>
+        <button class="tab" type="button" data-tab="evidence">Evidence</button>
+        <button class="tab" type="button" data-tab="tests">Tests</button>
+        <button class="tab" type="button" data-tab="monitoring">Monitoring</button>
+        <button class="tab" type="button" data-tab="approval">Decision</button>
+        <button class="tab" type="button" data-tab="artifacts">Artifacts</button>
+      </nav>
+
+      <section id="howto" class="tab-panel active">
+        <div class="section-heading">
+          <h2>How to Use This Tool</h2>
+          <span class="badge muted">Workbench guide</span>
+        </div>
+        <div class="guide-grid">
+          <article class="guide-feature">
+            <p class="panel-label">Start Here</p>
+            <h3>Use the flagship demo as a three-minute tour.</h3>
+            <p>Open the Vendor LLM case, scan Scope, Evidence, Tests, and Monitoring, then open Artifacts to see the draft decision brief and readiness review.</p>
+          </article>
+          <article>
+            <p class="panel-label">1. Scope</p>
+            <h3>Define the use before evaluating the tool.</h3>
+            <p>Begin with a blank new case unless a Library case pattern clearly fits. Record the business purpose, intended users, system boundary, data exposure, and prohibited uses.</p>
+          </article>
+          <article>
+            <p class="panel-label">2. Risk and Evidence</p>
+            <h3>Use risk drivers to shape the evidence package.</h3>
+            <p>Answer the risk-driver questions, then collect evidence by source. Vendor documentation and local testing should remain separate so gaps are visible.</p>
+          </article>
+          <article>
+            <p class="panel-label">3. Tests and Monitoring</p>
+            <h3>Turn gaps into review obligations.</h3>
+            <p>Add tests, acceptance signals, monitoring metrics, incident triggers, and reapproval conditions before relying on the generated decision artifacts.</p>
+          </article>
+          <article>
+            <p class="panel-label">4. Review Package</p>
+            <h3>Export a reviewable record.</h3>
+            <p>Use decision and artifacts to draft the residual-risk posture, conditions, readiness review, decision brief, and artifact bundle for human review.</p>
+          </article>
+        </div>
+      </section>
+
+      <section id="intake" class="tab-panel">
+        <div class="section-heading">
+          <h2>Scope and Intake</h2>
+          <span id="templateName" class="badge">Blank New Case</span>
+        </div>
+        <section class="case-start-panel">
+          <label>
+            Starting point
+            <select id="templateSelector"></select>
+          </label>
+          <div>
+            <p class="panel-label">Default Tier</p>
+            <strong id="templateDefaultTier">Moderate</strong>
+          </div>
+        </section>
+        <div class="form-grid">
+          <label>
+            Case name
+            <input id="caseName" type="text" placeholder="Name your case">
+          </label>
+          <label>
+            Status
+            <select id="caseStatus"></select>
+          </label>
+        </div>
+
+        <div class="section-heading">
+          <h2>Project Setup</h2>
+          <span class="badge muted">Kickoff details</span>
+        </div>
+        <div class="form-grid">
+          <label>
+            Evaluation owner
+            <input id="evaluationOwner" type="text" placeholder="Name the evaluation owner">
+          </label>
+          <label>
+            Business unit
+            <input id="businessUnit" type="text" placeholder="Name the responsible business unit">
+          </label>
+          <label>
+            Deployment stage
+            <select id="deploymentStage"></select>
+          </label>
+          <label>
+            Target decision date
+            <input id="targetDecisionDate" type="date">
+          </label>
+          <label class="wide">
+            Business purpose
+            <textarea id="businessPurpose" rows="4" placeholder="Define the business purpose and operational context"></textarea>
+          </label>
+          <label>
+            Vendor <span class="field-note">(N/A if for an internal model or system)</span>
+            <input id="vendorName" type="text" placeholder="Enter vendor name or N/A">
+          </label>
+          <label>
+            Model or system
+            <div class="compound-field">
+              <select id="modelSystemType">
+                <option value="model">Model</option>
+                <option value="system">System</option>
+              </select>
+              <input id="serviceName" type="text" placeholder="Name the model or system">
+            </div>
+          </label>
+        </div>
+
+        <details class="support-drawer">
+          <summary>Use-case intake questions</summary>
+          <div id="kickoffQuestions" class="kickoff-grid"></div>
+        </details>
+
+        <div class="section-heading">
+          <h2>Risk Drivers</h2>
+          <span id="matchedRule" class="badge muted">Rule: r2_vendor_internal_search_default</span>
+        </div>
+        <div id="riskDriverGrid" class="driver-grid"></div>
+
+        <div class="section-heading">
+          <h2>Scope Boundaries</h2>
+        </div>
+        <div class="list-editor">
+          <details class="scope-drawer">
+            <summary>
+              <span>Intended Users</span>
+              <span id="intendedUsersCount" class="badge muted">0 selected</span>
+            </summary>
+            <ul id="intendedUsers" class="editable-list"></ul>
+            <div class="inline-add">
+              <input id="newUser" type="text" placeholder="Add user group">
+              <button type="button" data-add="user">Add</button>
+            </div>
+          </details>
+          <details class="scope-drawer">
+            <summary>
+              <span>Prohibited Uses</span>
+              <span id="prohibitedUsesCount" class="badge muted">0 selected</span>
+            </summary>
+            <ul id="prohibitedUses" class="editable-list"></ul>
+            <div class="inline-add">
+              <input id="newProhibitedUse" type="text" placeholder="Add prohibited use">
+              <button type="button" data-add="prohibited">Add</button>
+            </div>
+          </details>
+        </div>
+
+        <details class="support-drawer">
+          <summary>Scenario background</summary>
+          <div class="support-grid">
+            <section>
+              <p class="panel-label">Scenario</p>
+              <h3 id="templateProfileName">Blank New Case</h3>
+              <p id="templateDescription"></p>
+            </section>
+            <section>
+              <p class="panel-label">Evaluation Focus</p>
+              <ul id="templateFocus" class="inline-list"></ul>
+            </section>
+          </div>
+          <section class="support-block">
+            <p class="panel-label">Framework Anchors</p>
+            <ul id="frameworkAnchors" class="anchor-list"></ul>
+          </section>
+        </details>
+      </section>
+
+      <section id="library" class="tab-panel">
+        <div class="section-heading">
+          <h2>Workbench Library</h2>
+          <span class="badge muted">Optional accelerators</span>
+        </div>
+        <div class="library-grid">
+          <section>
+            <h3>Case Patterns</h3>
+            <div id="libraryCasePatterns" class="library-stack"></div>
+          </section>
+          <section>
+            <h3>Evaluation Modules</h3>
+            <div id="libraryModules" class="library-stack"></div>
+          </section>
+          <section>
+            <h3>Metric Tools</h3>
+            <div id="libraryMetricTools" class="library-stack"></div>
+          </section>
+          <section>
+            <h3>Monitoring Metrics</h3>
+            <div id="libraryMonitoringMetrics" class="library-stack"></div>
+          </section>
+        </div>
+      </section>
+
+      <section id="evidence" class="tab-panel">
+        <div class="section-heading">
+          <h2>Evidence Matrix</h2>
+          <div class="heading-actions">
+            <span class="badge muted">Template starters</span>
+            <button id="addEvidence" type="button">Add Evidence</button>
+          </div>
+        </div>
+        <p class="section-note">
+          Record source, date, owner, system version, and verification status where available. Vendor materials remain vendor evidence; they do not prove local fitness without local testing, policy review, and accountable disposition.
+        </p>
+        <div id="evidenceTable" class="table-shell"></div>
+        <div class="section-heading">
+          <h2>Evidence Gaps</h2>
+        </div>
+        <ul id="gapList" class="gap-list"></ul>
+      </section>
+
+      <section id="tests" class="tab-panel">
+        <div class="section-heading">
+          <h2>Required Tests</h2>
+          <span id="blockingCount" class="badge">0 blocking</span>
+        </div>
+        <div id="testList" class="item-stack"></div>
+        <div class="section-heading">
+          <h2>Open Questions</h2>
+          <button id="addQuestion" type="button">Add Question</button>
+        </div>
+        <ul id="openQuestions" class="editable-list"></ul>
+      </section>
+
+      <section id="monitoring" class="tab-panel">
+        <div class="section-heading">
+          <h2>Monitoring Plan</h2>
+          <span id="reviewCadence" class="badge muted">TBD</span>
+        </div>
+        <div class="list-editor">
+          <div>
+            <h3>Metrics</h3>
+            <ul id="monitoringMetrics" class="editable-list"></ul>
+            <div class="inline-add">
+              <input id="newMetric" type="text" placeholder="Add metric">
+              <button type="button" data-add="metric">Add</button>
+            </div>
+          </div>
+          <div>
+            <h3>Incident Triggers</h3>
+            <ul id="incidentTriggers" class="editable-list"></ul>
+            <div class="inline-add">
+              <input id="newTrigger" type="text" placeholder="Add trigger">
+              <button type="button" data-add="trigger">Add</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="approval" class="tab-panel">
+        <div class="section-heading">
+          <h2>Draft Decision Posture</h2>
+          <span id="approvalTemplate" class="badge">TBD</span>
+        </div>
+        <div class="form-grid">
+          <label>
+            Decision posture
+            <select id="recommendation"></select>
+          </label>
+          <label class="wide">
+            Residual risk statement
+            <textarea id="residualRisk" rows="5"></textarea>
+          </label>
+        </div>
+        <div class="section-heading">
+          <h2>Conditions</h2>
+          <button id="addCondition" type="button">Add Condition</button>
+        </div>
+        <ul id="conditionList" class="editable-list"></ul>
+      </section>
+
+      <section id="artifacts" class="tab-panel">
+        <div class="section-heading">
+          <h2>Generated Artifacts</h2>
+          <div class="segmented">
+            <button type="button" class="artifact-select active" data-artifact="matrix">Matrix</button>
+            <button type="button" class="artifact-select" data-artifact="gaps">Gaps</button>
+            <button type="button" class="artifact-select" data-artifact="tests">Tests</button>
+            <button type="button" class="artifact-select" data-artifact="monitoring">Monitoring</button>
+            <button type="button" class="artifact-select" data-artifact="approval">Decision</button>
+            <button type="button" class="artifact-select" data-artifact="brief">Brief</button>
+            <button type="button" class="artifact-select" data-artifact="readiness">Readiness</button>
+          </div>
+        </div>
+        <div class="artifact-actions">
+          <button id="copyArtifact" type="button">Copy</button>
+          <button id="downloadArtifact" type="button">Download</button>
+          <button id="downloadCase" type="button">Save Case JSON</button>
+          <button id="downloadBundle" type="button" class="primary">Artifact Bundle</button>
+        </div>
+        <aside class="artifact-boundary" aria-label="Artifact boundary notice">
+          Draft artifact only. Generated outputs are for review and discussion. The prototype checks documentation completeness, not evidence quality. Source claims, vendor evidence, local test results, and policy conclusions must be independently verified before reliance.
+        </aside>
+        <pre id="artifactPreview" class="artifact-preview"></pre>
+      </section>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <span>PAE Workbench v1.1.5 &middot; July 2026</span>
+    <span>Educational prototype. Not legal, regulatory, compliance, security, procurement, or professional advice.</span>
+    <span>Copyright 2026 Honggao Cao. Personal, classroom, and noncommercial educational use unless otherwise noted.</span>
+    <span><a href="working-paper.html">Framework Paper</a> &middot; <a href="#top">Back to top</a></span>
+  </footer>
+
+  <script src="app.js?v=1.1.5"></script>
+</body>
+</html>
